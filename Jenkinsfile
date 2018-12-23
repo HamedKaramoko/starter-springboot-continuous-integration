@@ -8,7 +8,7 @@ pipeline {
         }
         stage('mavenTest') {
             steps {
-                sh 'mvn test'
+                sh 'mvn -e test'
             }
             post {
                 always {
