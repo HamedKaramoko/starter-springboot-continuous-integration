@@ -8,7 +8,7 @@ pipeline {
         }
         stage('mavenTest') {
             steps {
-                sh 'sudo mvn test'
+                sh 'mvn test'
             }
             post {
                 always {
@@ -18,7 +18,7 @@ pipeline {
         }
         stage('mavenBuild') {
             steps {
-                sh 'sudo mvn -B -DskipTests clean package'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
     }
