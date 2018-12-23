@@ -1,7 +1,12 @@
 pipeline {
     agent { docker { image 'maven:latest' } }
     stages {
-        stage('test') {
+    	stage('folder') {
+            steps {
+                sh 'ls -la'
+            }
+        }
+        stage('mavenTest') {
             steps {
                 sh 'mvn test'
             }
@@ -11,7 +16,7 @@ pipeline {
                 }
             }
         }
-        stage('build') {
+        stage('mavenBuild') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
             }
