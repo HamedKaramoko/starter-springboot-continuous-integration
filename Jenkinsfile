@@ -22,4 +22,12 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            mail to: 'hamed.karamoko.hk@outlook.com',
+             subject: "Succedded Pipeline: ${currentBuild.fullDisplayName}",
+             body: "All is right with ${env.BUILD_URL}"
+        }
+    }
+
 }
