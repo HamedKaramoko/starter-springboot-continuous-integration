@@ -18,6 +18,12 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<sonar.host.url>http://35.211.165.56:9000</sonar.host.url>
+		<sonar.projectKey>ci.hk.starter:starter-springboot-continuous-integration</sonar.projectKey>
+		<sonar.projectName>Jenkins_Continuous_Integration</sonar.projectName>
+		<sonar.projectVersion>${project.version}</sonar.projectVersion>
+		<sonar.sources>${project.build.sourceDirectory}</sonar.sources>
+		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
 	</properties>
 
 	<dependencies>

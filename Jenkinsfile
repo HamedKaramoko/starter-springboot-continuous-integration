@@ -29,11 +29,6 @@ pipeline {
         sh 'mvn -B -DskipTests clean package'
       }
     }
-    stage('Email') {
-      steps {
-        mail(subject: 'EHHHHHHH', body: 'klfdklsklsklfdmlkfdkfds', charset: 'UTF-8', from: 'tonton', to: 'hamed.karamoko.hk@outlook.com')
-      }
-    }
   }
   post {
     success {
