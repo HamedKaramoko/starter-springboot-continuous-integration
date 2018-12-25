@@ -25,11 +25,11 @@
 		<sonar.sources>${project.build.sourceDirectory}</sonar.sources>
 		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
 		<!-- Reusing already generated report -->
-		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.skipDesign>true</sonar.skipDesign>
-		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-		<sonar.jacoco.reportPaths>${project.build.directory}/coverage-reports/jacoco.exec, ${project.build.directory}/coverage-reports/jacoco-it.exec</sonar.jacoco.reportPaths>
-		<sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
+<!-- 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis> -->
+<!-- 		<sonar.skipDesign>true</sonar.skipDesign> -->
+<!-- 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin> -->
+<!-- 		<sonar.jacoco.reportPaths>${project.build.directory}/coverage-reports/jacoco.exec, ${project.build.directory}/coverage-reports/jacoco-it.exec</sonar.jacoco.reportPaths> -->
+<!-- 		<sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath> -->
 		<!-- Reusing already generated report -->
 		
 	</properties>
