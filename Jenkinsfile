@@ -25,7 +25,7 @@ pipeline {
     }
     stage('mavenBuild') {
       steps {
-        sh 'mvn -B -DskipTests clean package'
+        sh 'mvn -B -DskipTests clean verify'
       }
     }
     stage('Sonar analysis') {
