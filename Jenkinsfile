@@ -8,15 +8,15 @@ pipeline {
   }
   stages {
     stage('mavenTest') {
+    	steps {
+	        sh 'mvn -DskipTests=false clean test'
+	    }
       post {
         always {
           junit 'target/surefire-reports/*.xml'
-
+          junit 'target/failsafe-reports/*.xml'
         }
 
-      }
-      steps {
-        sh 'mvn clean test'
       }
     }
     stage('Admin check') {
@@ -37,12 +37,5 @@ pipeline {
 
       }
     }
-  }
-  post {
-    success {
-      mail(to: 'hamed.karamoko.hk@outlook.com', subject: "Succedded Pipeline: ${currentBuild.fullDisplayName}", body: "All is right with ${env.BUILD_URL}")
-
-    }
-
   }
 }
