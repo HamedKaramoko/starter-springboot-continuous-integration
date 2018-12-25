@@ -18,11 +18,6 @@ pipeline {
 
       }
     }
-    stage('Admin check') {
-      steps {
-        input 'Do you want to go further?'
-      }
-    }
     stage('mavenBuild') {
       steps {
         sh 'mvn -B -DskipTests clean verify'
