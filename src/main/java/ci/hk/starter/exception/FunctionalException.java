@@ -12,14 +12,6 @@ public class FunctionalException extends RuntimeException {
 	private final HttpStatus status;
 	
 	/**
-	 * No argument constructor.
-	 */
-	protected FunctionalException() {
-		super();
-		this.status = HttpStatus.INTERNAL_SERVER_ERROR;
-	}
-	
-	/**
 	 * Constructor with Exception message.
 	 * 
 	 * @param message of the exception.
