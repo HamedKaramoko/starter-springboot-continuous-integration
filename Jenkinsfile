@@ -32,4 +32,15 @@ pipeline {
       }
     }
   }
+  post {
+        success {
+            echo 'Your build is successfully ended.'
+        }
+        failure {
+            echo 'Your build is done with failure.'
+        }
+        unstable {
+            echo 'You made an unstable pipeline state.'
+        }
+    }
 }
