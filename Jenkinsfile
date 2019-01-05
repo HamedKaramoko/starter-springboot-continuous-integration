@@ -33,6 +33,14 @@ pipeline {
 
       }
     }
+    stage('Docker checking') {
+      steps {
+        sh 'ls -l'
+        sh 'docker info'
+        sh 'docker --version'
+        sh 'docker build --help'
+      }
+    }
     stage('Docker image build') {
       steps {
         sh 'docker build -t continuous-integration .'
