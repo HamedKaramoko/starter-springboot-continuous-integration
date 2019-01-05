@@ -4,8 +4,8 @@ pipeline {
       image 'maven:latest'
       args '-v /root/.m2:/root/.m2'
     }
-
   }
+  def tag = '1.0'
   stages {
     stage('mavenTest') {
     	steps {
@@ -29,6 +29,18 @@ pipeline {
           sh 'mvn sonar:sonar'
         }
 
+      }
+    }
+    stage('Docker image build') {
+      steps {
+        sh 'docker build -t continuous-integration .'
+        sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:${tag}'
+        sh 'docker push hamedkaramoko/continuous-integration:${tag}'
+      }
+    }
+    stage('Docker deploy') {
+      steps {
+        sh 'docker run --rm hamed/karamoko/continuous-integration:${tag}'
       }
     }
   }
