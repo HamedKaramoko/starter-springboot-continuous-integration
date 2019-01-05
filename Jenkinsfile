@@ -5,7 +5,9 @@ pipeline {
       args '-v /root/.m2:/root/.m2'
     }
   }
-  def tag = '1.0'
+  environment {
+        TAG=1.0
+    }
   stages {
     stage('mavenTest') {
     	steps {
@@ -34,13 +36,13 @@ pipeline {
     stage('Docker image build') {
       steps {
         sh 'docker build -t continuous-integration .'
-        sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:${tag}'
-        sh 'docker push hamedkaramoko/continuous-integration:${tag}'
+        sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:$TAG'
+        sh 'docker push hamedkaramoko/continuous-integration:$TAG'
       }
     }
     stage('Docker deploy') {
       steps {
-        sh 'docker run --rm hamed/karamoko/continuous-integration:${tag}'
+        sh 'docker run --rm hamed/karamoko/continuous-integration:$TAG'
       }
     }
   }
