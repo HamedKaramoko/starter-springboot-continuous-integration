@@ -3,8 +3,10 @@ package ci.hk.starter.service;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import ci.hk.starter.exception.FunctionalException;
 import ci.hk.starter.model.Person;
 
 @Service
@@ -15,7 +17,10 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public Person getById(long id) {
 		
-		return personList.stream().filter(person -> person.getId() == id).findFirst().orElseThrow(() -> new RuntimeException(String.format("No person with id -> %s found", id)));
+		return personList.stream()
+				.filter(person -> person.getId() == id)
+				.findFirst()
+				.orElseThrow(() -> new FunctionalException(HttpStatus.NOT_FOUND, String.format("No person with id -> %s found", id)));
 	}
 
 	@Override

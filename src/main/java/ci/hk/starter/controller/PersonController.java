@@ -23,6 +23,14 @@ public class PersonController {
 	@Autowired
 	private PersonService personService;
 	
+	/**
+	 * Service allowing to obtain a person by its id.
+	 * When no person found a {@link RuntimeException} is thrown.
+	 * 
+	 * @param id represents the id of the person to find.
+	 * 
+	 * @return a {@link Person} object having this id.
+	 */
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Person getById(@PathVariable long id) {
 		
@@ -31,6 +39,12 @@ public class PersonController {
 		return personService.getById(id);
 	}
 	
+	/**
+	 * Service allowing to get all the person saved.
+	 * When no person found it returns an empty {@link List}.
+	 * 
+	 * @return a {@link List} of {@link Person}.
+	 */
 	@GetMapping(value="/", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Person> getAll() {
 		return personService.getAll();
