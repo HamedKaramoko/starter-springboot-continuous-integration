@@ -34,13 +34,17 @@ pipeline {
       }
     }
     stage('Docker image build') {
+      agent { docker { image 'docker:edge-git' } }
       steps {
-        sh './docker-build-script.sh'
+        sh 'docker build -t continuous-integration .'
+        sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:$TAG'
+        sh 'docker push hamedkaramoko/continuous-integration:$TAG'
       }
     }
     stage('Docker deploy') {
+      agent { docker { image 'docker:edge-git' } }
       steps {
-        sh './docker-deploy.sh'
+        sh 'docker run --rm hamed/karamoko/continuous-integration:$TAG'
       }
     }
   }
