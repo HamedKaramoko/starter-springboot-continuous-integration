@@ -1,15 +1,16 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:latest'
-      args '-v /root/.m2:/root/.m2'
-    }
-  }
+  agent any
   environment {
         TAG=1.0
     }
   stages {
     stage('mavenTest') {
+    	agent {
+    		docker {
+		      image 'maven:latest'
+		      args '-v /root/.m2:/root/.m2'
+		    }
+	  	}
     	steps {
 	        sh 'mvn -DskipTests=false clean test'
 	    }
@@ -21,6 +22,12 @@ pipeline {
       }
     }
     stage('mavenBuild') {
+      agent {
+    		docker {
+		      image 'maven:latest'
+		      args '-v /root/.m2:/root/.m2'
+		    }
+	  	}
       steps {
         sh 'mvn -B verify'
       }
