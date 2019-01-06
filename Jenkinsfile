@@ -38,6 +38,14 @@ pipeline {
       	customWorkspace '/root/.jenkins/workspace/ot-continuous-integration_master'
       	image 'docker:stable-dind' } }
       steps {
+        sh 'ls -la'
+      }
+    }
+    stage('Docker image build') {
+      agent { docker { 
+      	customWorkspace '/root/.jenkins/workspace/ot-continuous-integration_master'
+      	image 'docker:stable-dind' } }
+      steps {
         sh 'docker build -t continuous-integration .'
         sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:1.0'
         sh 'docker push hamedkaramoko/continuous-integration:1.0'
