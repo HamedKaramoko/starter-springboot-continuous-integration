@@ -1,0 +1,1 @@
+docker run --rm hamed/karamoko/continuous-integration:${TAG}

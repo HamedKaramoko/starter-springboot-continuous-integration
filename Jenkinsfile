@@ -35,14 +35,12 @@ pipeline {
     }
     stage('Docker image build') {
       steps {
-        sh 'docker build -t continuous-integration .'
-        sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:$TAG'
-        sh 'docker push hamedkaramoko/continuous-integration:$TAG'
+        sh './docker-build-script.sh'
       }
     }
     stage('Docker deploy') {
       steps {
-        sh 'docker run --rm hamed/karamoko/continuous-integration:$TAG'
+        sh './docker-deploy.sh'
       }
     }
   }
