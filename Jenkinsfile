@@ -33,17 +33,7 @@ pipeline {
 
       }
     }
-    stage('Docker checking') {
-      agent any
-      steps {
-        sh 'ls -l'
-        sh 'docker info'
-        sh 'docker --version'
-        sh 'docker build --help'
-      }
-    }
     stage('Docker image build') {
-      agent any
       steps {
         sh 'docker build -t continuous-integration .'
         sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:$TAG'
@@ -51,7 +41,6 @@ pipeline {
       }
     }
     stage('Docker deploy') {
-      agent any
       steps {
         sh 'docker run --rm hamed/karamoko/continuous-integration:$TAG'
       }
