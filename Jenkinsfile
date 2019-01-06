@@ -34,8 +34,8 @@ pipeline {
       }
     }
     stage('Pre Docker image build') {
-      agent any
       steps {
+      	sh 'pwd'
         sh 'ls -la'
       }
     }
