@@ -1,51 +1,15 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'maven:latest'
+      args '-v /root/.m2:/root/.m2'
+    }
+  }
   environment {
         TAG=1.0
     }
   stages {
-    stage('mavenTest') {
-    	agent {
-    		docker {
-		      image 'maven:latest'
-		      args '-v /root/.m2:/root/.m2'
-		    }
-	  	}
-    	steps {
-	        sh 'mvn -DskipTests=false clean test'
-	    }
-      post {
-        always {
-          junit 'target/surefire-reports/*.xml'
-        }
-
-      }
-    }
-    stage('mavenBuild') {
-      agent {
-    		docker {
-		      image 'maven:latest'
-		      args '-v /root/.m2:/root/.m2'
-		    }
-	  	}
-      steps {
-        sh 'mvn -B verify'
-      }
-    }
-    stage('Sonar analysis') {
-      agent {
-    		docker {
-		      image 'maven:latest'
-		      args '-v /root/.m2:/root/.m2'
-		    }
-	  	}
-      steps {
-        withSonarQubeEnv('Jenkins_Continuous_Integration') {
-          sh 'mvn sonar:sonar'
-        }
-
-      }
-    }
+    
     stage('Docker image build') {
       agent { docker { image 'docker:stable-dind' } }
       steps {
