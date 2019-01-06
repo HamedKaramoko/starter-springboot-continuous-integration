@@ -33,7 +33,7 @@ pipeline {
 
       }
     }
-    stage('Docker image build') {
+    stage('Pre Docker image build') {
       agent { docker { 
       	customWorkspace '/root/.jenkins/workspace/ot-continuous-integration_master'
       	image 'docker:stable-dind' } }
