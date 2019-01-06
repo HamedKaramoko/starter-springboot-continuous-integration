@@ -24,8 +24,7 @@ pipeline {
       }
     }
     stage('Docker image build') {
-      agent { docker { 
-      	image 'docker:stable-dind' } }
+      agent { label 'docker' }
       steps {
       	unstash 'warfile'
         sh 'docker build -t continuous-integration .'
