@@ -9,28 +9,10 @@ pipeline {
         TAG=1.0
     }
   stages {
-    stage('mavenTest') {
-    	steps {
-	        sh 'mvn -DskipTests=false clean test'
-	    }
-      post {
-        always {
-          junit 'target/surefire-reports/*.xml'
-        }
-
-      }
-    }
     stage('mavenBuild') {
       steps {
         sh 'mvn -B verify'
-      }
-    }
-    stage('Sonar analysis') {
-      steps {
-        withSonarQubeEnv('Jenkins_Continuous_Integration') {
-          sh 'mvn sonar:sonar'
-        }
-
+        stash includes: '**/target/*.war', name: 'warfile'
       }
     }
     stage('Pre Docker image build') {
@@ -39,21 +21,14 @@ pipeline {
         sh 'ls -la'
       }
     }
-    stage('Docker image build') {
+    stage('Docker image build and deploy') {
       agent { docker { 
-      	customWorkspace '/root/.jenkins/workspace/ot-continuous-integration_master'
       	image 'docker:stable-dind' } }
       steps {
+      	unstash 'warfile'
         sh 'docker build -t continuous-integration .'
         sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:1.0'
         sh 'docker push hamedkaramoko/continuous-integration:1.0'
-      }
-    }
-    stage('Docker deploy') {
-      agent { docker { 
-      	customWorkspace '/root/.jenkins/workspace/ot-continuous-integration_master'
-      	image 'docker:stable-dind' } }
-      steps {
         sh 'docker run --rm hamed/karamoko/continuous-integration:1.0'
       }
     }
