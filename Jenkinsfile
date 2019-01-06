@@ -36,15 +36,15 @@ pipeline {
     stage('Docker image build') {
       agent { docker { image 'docker:stable-dind' } }
       steps {
-        sh 'docker build -t continuous-integration .'
-        sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:1.0'
-        sh 'docker push hamedkaramoko/continuous-integration:1.0'
+        sh "docker build -t continuous-integration ."
+        sh "docker tag continuous-integration hamedkaramoko/continuous-integration:1.0"
+        sh "docker push hamedkaramoko/continuous-integration:1.0"
       }
     }
     stage('Docker deploy') {
       agent { docker { image 'docker:stable-dind' } }
       steps {
-        sh 'docker run --rm hamed/karamoko/continuous-integration:$TAG'
+        sh "docker run --rm hamed/karamoko/continuous-integration:1.0"
       }
     }
   }
