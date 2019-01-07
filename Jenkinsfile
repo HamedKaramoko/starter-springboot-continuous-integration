@@ -23,6 +23,7 @@ pipeline {
     stage('mavenBuild') {
       steps {
         sh 'mvn -B verify'
+	stash includes: '**/target/*.war', name: 'warfile'
       }
     }
     stage('Sonar analysis') {
@@ -36,6 +37,7 @@ pipeline {
     stage('Docker image build') {
       agent { label ‘master’ }
       steps {
+	unstash 'warfile'
         sh 'docker build -t continuous-integration .'
         sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:1.0'
         sh 'docker push hamedkaramoko/continuous-integration:1.0'
