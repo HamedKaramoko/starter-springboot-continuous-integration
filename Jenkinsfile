@@ -1,29 +1,24 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:latest'
-      args '-v /root/.m2:/root/.m2'
-    }
-  }
   environment {
         TAG=1.0
     }
   stages {
-    stage('mavenTest') {
+    stage('mavenBuild') {
+    	agent {
+		    docker {
+		      image 'maven:latest'
+		      args '-v /root/.m2:/root/.m2'
+		    }
+		  }
     	steps {
-	        sh 'mvn -DskipTests=false clean test'
+	        sh 'mvn verify'
+	        stash includes: '**/target/*.war', name: 'warfile'
 	    }
       post {
         always {
           junit 'target/surefire-reports/*.xml'
         }
 
-      }
-    }
-    stage('mavenBuild') {
-      steps {
-        sh 'mvn -B verify'
-	stash includes: '**/target/*.war', name: 'warfile'
       }
     }
     stage('Sonar analysis') {
@@ -37,7 +32,7 @@ pipeline {
     stage('Docker image build') {
       agent { label ‘master’ }
       steps {
-	unstash 'warfile'
+		unstash 'warfile'
         sh 'docker build -t continuous-integration .'
         sh 'docker tag continuous-integration hamedkaramoko/continuous-integration:1.0'
         sh 'docker push hamedkaramoko/continuous-integration:1.0'
