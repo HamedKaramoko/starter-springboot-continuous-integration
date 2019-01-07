@@ -8,6 +8,7 @@ pipeline {
     	agent {
 		    docker {
 		      image 'maven:latest'
+		      label 'maven-label'
 		      args '-v /root/.m2:/root/.m2'
 		    }
 		  }
@@ -23,12 +24,7 @@ pipeline {
       }
     }
     stage('Sonar analysis') {
-      agent {
-	    docker {
-	      image 'maven:latest'
-	      args '-v /root/.m2:/root/.m2'
-	    }
-	  }
+      agent { label 'maven-label' }
       steps {
         withSonarQubeEnv('Jenkins_Continuous_Integration') {
           sh 'mvn sonar:sonar'
