@@ -24,7 +24,7 @@ pipeline {
       }
     }
     stage('Docker image build') {
-      agent { label 'docker' }
+      agent { label 'master' }
       steps {
       	unstash 'warfile'
         sh 'docker build -t continuous-integration .'
