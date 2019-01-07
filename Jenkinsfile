@@ -23,7 +23,12 @@ pipeline {
       }
     }
     stage('Sonar analysis') {
-      agent { label ‘master’ }
+      agent {
+	    docker {
+	      image 'maven:latest'
+	      args '-v /root/.m2:/root/.m2'
+	    }
+	  }
       steps {
         withSonarQubeEnv('Jenkins_Continuous_Integration') {
           sh 'mvn sonar:sonar'
