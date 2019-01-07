@@ -32,7 +32,7 @@ pipeline {
     stage('Docker image build') {
       agent {
 	    docker {
-	      image 'docker:table-dind'
+	      image 'docker:stable-dind'
 	    }
 	  }
       steps {
@@ -45,7 +45,7 @@ pipeline {
     stage('Docker deploy') {
       agent {
 	    docker {
-	      image 'docker:table-dind'
+	      image 'docker:stable-dind'
 	    }
 	  }
       steps {
