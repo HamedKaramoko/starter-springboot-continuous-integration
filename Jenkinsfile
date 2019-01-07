@@ -1,4 +1,5 @@
 pipeline {
+  agent none
   environment {
         TAG=1.0
     }
@@ -22,6 +23,7 @@ pipeline {
       }
     }
     stage('Sonar analysis') {
+      agent { label ‘master’ }
       steps {
         withSonarQubeEnv('Jenkins_Continuous_Integration') {
           sh 'mvn sonar:sonar'
