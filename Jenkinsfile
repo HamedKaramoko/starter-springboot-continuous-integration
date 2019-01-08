@@ -1,15 +1,16 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:latest'
-      args '-v /root/.m2:/root/.m2'
-    }
-  }
+  agent none
   environment {
         TAG=1.0
     }
   stages {
     stage('mavenBuild') {
+        agent {
+            docker {
+              image 'maven:latest'
+              args '-v /root/.m2:/root/.m2'
+            }
+        }
     	steps {
 	        sh 'mvn verify'
 	        stash includes: '**/target/*.war', name: 'warfile'
@@ -21,20 +22,8 @@ pipeline {
 
       }
     }
-    stage('Sonar analysis') {
-      steps {
-        withSonarQubeEnv('Jenkins_Continuous_Integration') {
-          sh 'mvn sonar:sonar'
-        }
-
-      }
-    }
     stage('Docker image build') {
-      agent {
-	    docker {
-	      image 'docker:stable-dind'
-	    }
-	  }
+      agent { label 'master' }
       steps {
 		unstash 'warfile'
         sh 'docker build -t continuous-integration .'
@@ -43,13 +32,9 @@ pipeline {
       }
     }
     stage('Docker deploy') {
-      agent {
-	    docker {
-	      image 'docker:stable-dind'
-	    }
-	  }
+      agent any
       steps {
-        sh 'docker run --rm hamed/karamoko/continuous-integration:1.0'
+        sh './docker-deploy.sh'
       }
     }
   }
