@@ -1,5 +1,8 @@
 package ci.hk.starter.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -17,19 +20,23 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import ci.hk.starter.exception.FunctionalException;
+import ci.hk.starter.mapper.PersonMapper;
 import ci.hk.starter.model.Person;
 import ci.hk.starter.service.PersonService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(PersonController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class PersonControllerTest {
 
 	@Autowired
@@ -38,19 +45,22 @@ public class PersonControllerTest {
 	@MockBean
     private PersonService personService;
 	
+	@SpyBean
+	private PersonMapper personMapper;
+	
 	private List<Person> persons;
 
 	@Before
 	public void setUp() throws Exception {
-		Person person1 =  new Person();
-		person1.setId(1L);
-		person1.setName("Hamed Karamoko");
+		Person person1 =  new Person(1L, "Hamed Karamoko");
 		
-		Person person2 =  new Person();
-		person2.setId(2L);
-		person2.setName("Mariama Karamoko");
+		Person person2 =  new Person(2L, "Mariama Karamoko");
 		
 		persons = Arrays.asList(person1, person2);
+		
+		when(personMapper.fromPersonToPersonDto(any())).thenCallRealMethod();
+		when(personMapper.fromPersonListToPersonDtoList(anyList())).thenCallRealMethod();
+		
 	}
 
 	/**
@@ -63,7 +73,7 @@ public class PersonControllerTest {
 	@Test
 	public void testGetByIdWhenPersonServiceReturnAPerson() throws Exception{
 		
-		when(personService.getById(1L)).thenReturn(persons.get(0));
+		when(personService.getById(anyLong())).thenReturn(persons.get(0));
 		
 		mockMvc.perform(get("/persons/1")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -86,7 +96,7 @@ public class PersonControllerTest {
 	@Test
 	public void testGetByIdWhenPersonServiceThrowAnException() throws Exception{
 		
-		when(personService.getById(1L)).thenThrow(new FunctionalException(HttpStatus.NOT_FOUND, "There are no person with this id"));
+		when(personService.getById(anyLong())).thenThrow(new FunctionalException(HttpStatus.NOT_FOUND, "There are no person with this id"));
 		
 		mockMvc.perform(get("/persons/1")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))

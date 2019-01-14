@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import ci.hk.starter.model.Person;
+import ci.hk.starter.dto.PersonDto;
+import ci.hk.starter.mapper.PersonMapper;
 import ci.hk.starter.service.PersonService;
 
 @RestController
@@ -21,15 +22,18 @@ public class PersonController {
 	@Autowired
 	private PersonService personService;
 	
+	@Autowired
+	private PersonMapper personMapper;
+	
 	/**
 	 * Service allowing to get all the person saved.
 	 * When no person found it returns an empty {@link List}.
 	 * 
-	 * @return a {@link List} of {@link Person}.
+	 * @return a {@link List} of {@link PersonDto}.
 	 */
 	@GetMapping(value="/persons", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<Person> getAll() {
-		return personService.getAll();
+	public List<PersonDto> getAll() {
+		return personMapper.fromPersonListToPersonDtoList(personService.getAll());
 	}
 	
 	/**
@@ -38,14 +42,14 @@ public class PersonController {
 	 * 
 	 * @param id represents the id of the person to find.
 	 * 
-	 * @return a {@link Person} object having this id.
+	 * @return a {@link PersonDto} object having this id.
 	 */
 	@GetMapping(value="/persons/{id}", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Person getById(@PathVariable long id) {
+	public PersonDto getById(@PathVariable long id) {
 		
 		LOGGER.info("Trying to find a person with id {}", id);
 		
-		return personService.getById(id);
+		return personMapper.fromPersonToPersonDto(personService.getById(id));
 	}
 	
 }
